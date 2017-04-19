@@ -65,7 +65,7 @@ for k in tableOfSplits:
     p2.append( np.mean(predicted == provider.y_test))
 
     from sklearn.neural_network import MLPClassifier
-    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(500, 200), random_state=1)
+    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
     clf.fit(provider.X_train, provider.y_train)
     predicted = clf.predict(provider.X_test)
     p3.append( np.mean(predicted == provider.y_test))
@@ -73,9 +73,12 @@ for k in tableOfSplits:
 
 
 print(scipy.stats.friedmanchisquare(p1,p2,p3))
-print("Bayes\t SGD\t NN")
+
+print("Bayes")
 print(p1)
 print("**********")
+print("SGD")
 print(p2)
 print("**********")
+print("NN")
 print(p3)
