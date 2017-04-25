@@ -53,22 +53,29 @@ p2 = []
 p3 = []
 tableOfSplits = [0.75, 0.5, 0.25]
 for k in tableOfSplits:
-    provider.split(k,data,w[1])
-    from sklearn.naive_bayes import MultinomialNB
-    clf = MultinomialNB().fit(provider.X_train, provider.y_train)
-    predicted = clf.predict(provider.X_test)
-    p1.append( np.mean(predicted == provider.y_test))
+    p11 = []
+    p22 = []
+    p33 = []
+    for t in range(0,10):
+        provider.split(k,data,w[1])
+        from sklearn.naive_bayes import MultinomialNB
+        clf = MultinomialNB().fit(provider.X_train, provider.y_train)
+        predicted = clf.predict(provider.X_test)
+        p11.append( np.mean(predicted == provider.y_test))
 
-    from sklearn.linear_model import SGDClassifier
-    clf = SGDClassifier().fit(provider.X_train, provider.y_train)
-    predicted = clf.predict(provider.X_test)
-    p2.append( np.mean(predicted == provider.y_test))
+        from sklearn.linear_model import SGDClassifier
+        clf = SGDClassifier().fit(provider.X_train, provider.y_train)
+        predicted = clf.predict(provider.X_test)
+        p22.append( np.mean(predicted == provider.y_test))
 
-    from sklearn.neural_network import MLPClassifier
-    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
-    clf.fit(provider.X_train, provider.y_train)
-    predicted = clf.predict(provider.X_test)
-    p3.append( np.mean(predicted == provider.y_test))
+        from sklearn.neural_network import MLPClassifier
+        clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+        clf.fit(provider.X_train, provider.y_train)
+        predicted = clf.predict(provider.X_test)
+        p33.append( np.mean(predicted == provider.y_test))
+    p1.append(p11)
+    p2.append(p22)
+    p3.append(p33)
 
 
 
@@ -82,3 +89,36 @@ print(p2)
 print("**********")
 print("NN")
 print(p3)
+
+
+import matplotlib.pyplot as plt
+
+
+i = 0.75
+for t in p1:
+    label = "Bayes " + str(i)
+    plt.plot(np.array([1,2,3,4,5,6,7,8,9,10]), np.array(t), label=label)
+    i = i-0.25
+
+i = 0.75
+for t in p2:
+    label = "SGD " + str(i)
+    plt.plot(np.array([1,2,3,4,5,6,7,8,9,10]), np.array(t), label=label)
+    i = i - 0.25
+
+i = 0.75
+for t in p3:
+    label = "NN " + str(i)
+    plt.plot(np.array([1,2,3,4,5,6,7,8,9,10]), np.array(t), label=label)
+    i = i - 0.25
+
+
+
+plt.legend(bbox_to_anchor=(0.8, 0.9), loc=2, borderaxespad=0.)
+plt.show()
+
+
+
+
+
+
